@@ -76,6 +76,16 @@
   .loader{display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--muted);padding:60px 0}
   .dot{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
+  .cgv-links{text-align:center;margin-top:14px;font-size:14px;color:var(--muted)}
+  .inline-link{background:none;border:0;padding:0;font:inherit;color:var(--accent-dark);text-decoration:underline;cursor:pointer}
+  .modal{position:fixed;inset:0;background:rgba(30,27,24,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
+  .modal-card{background:var(--card);border-radius:18px;width:100%;max-width:720px;max-height:90vh;display:flex;flex-direction:column;overflow:hidden}
+  .modal-head{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+  .modal-head h2{font-family:var(--serif);font-weight:600;font-size:22px;margin:0}
+  .modal-close{background:none;border:0;font-size:28px;line-height:1;cursor:pointer;color:var(--muted);padding:0 4px}
+  .modal .doc-box{max-height:none;border:0;border-radius:0;flex:1;overflow:auto}
+  .modal .doc-box h1.annexe:first-child{margin-top:0;padding-top:0;border-top:0}
+  body.no-scroll{overflow:hidden}
   .foot{text-align:center;font-size:12px;color:var(--muted);margin-top:34px}
   .hidden{display:none!important}
   @media (min-width:640px){
@@ -99,8 +109,8 @@
   </section>
 
   <section id="contract" class="hidden">
-    <h1 class="hello">Bienvenue <span id="c-prenom"></span></h1>
-    <p class="lead">Voici le récapitulatif de ton accompagnement. Lis le contrat, coche les cases et signe : ça prend 2 minutes.</p>
+    <h1 class="hello">Bienvenue <span id="c-prenom"></span> ✨</h1>
+    <p class="lead">Bienvenue dans ton accompagnement ! Voici ton contrat à signer. Prends le temps de le lire, puis signe-le en bas de la page.</p>
 
     <div class="card">
       <h2>Ton accompagnement</h2>
@@ -117,7 +127,7 @@
     <div class="card">
       <h2>Ton contrat</h2>
       <div class="doc-box" id="c-doc"></div>
-      <p class="scroll-hint">Fais défiler pour lire le contrat, les conditions générales de vente<span id="c-hint-retract"> et le formulaire de rétractation</span>.</p>
+      <p class="cgv-links"><button type="button" class="inline-link" data-cgv>Conditions générales de vente<span class="only-part"> et formulaire de rétractation</span></button></p>
     </div>
 
     <form id="sign-form" class="card" novalidate>
@@ -127,7 +137,7 @@
       <label class="field"><span>Code postal et ville</span><input type="text" id="f-cpville" autocomplete="postal-code" required></label>
 
       <label class="check"><input type="checkbox" id="f-cgv">
-        <div>J'ai lu et j'accepte le contrat, l'échéancier de paiement et ses annexes (conditions générales de vente<span class="only-part"> et formulaire de rétractation</span>).</div>
+        <div>J'ai lu et j'accepte le contrat<span id="c-ech-txt">, l'échéancier de paiement</span> et les <button type="button" class="inline-link" data-cgv>conditions générales de vente</button>.</div>
       </label>
 
       <label class="check only-part"><input type="checkbox" id="f-demarrage">
@@ -139,12 +149,6 @@
       <label class="check only-pro hidden"><input type="checkbox" id="f-pro">
         <div>Je confirme conclure ce contrat pour les besoins de mon activité professionnelle.
           <small>L'accompagnement est en lien direct avec mon activité. Je ne bénéficie donc pas du droit de rétractation du Code de la consommation.</small>
-        </div>
-      </label>
-
-      <label class="check"><input type="checkbox" id="f-sante">
-        <div>Je déclare être en capacité physique et psychique de participer à l'accompagnement, j'ai pris connaissance de l'article 6 « Santé et précautions », et j'accepte que les informations que je partage, y compris sur ma santé, soient utilisées uniquement pour mon accompagnement.
-          <small>En cas de pathologie ou de fragilité (cardiovasculaire, épilepsie, grossesse, trouble psychique, traitement en cours…), je consulte un professionnel de santé et je m'abstiens des pratiques concernées.</small>
         </div>
       </label>
 
@@ -178,6 +182,13 @@
       <p class="lead" style="margin:18px auto 0">J'ai hâte de commencer cet accompagnement avec toi ✨</p>
     </div>
   </section>
+
+  <div class="modal hidden" id="cgv-modal" role="dialog" aria-modal="true" aria-labelledby="cgv-title">
+    <div class="modal-card">
+      <div class="modal-head"><h2 id="cgv-title">Conditions générales de vente</h2><button type="button" class="modal-close" id="cgv-close" aria-label="Fermer">×</button></div>
+      <div class="doc-box" id="cgv-doc"></div>
+    </div>
+  </div>
 
   <p class="foot">Noémie Conche – Entrepreneur individuel – SIRET 922 193 933 00038</p>
 </main>
@@ -224,13 +235,22 @@
     if (d.debut || d.fin) $('c-dates').textContent = 'Du ' + (d.debut || '…') + ' au ' + (d.fin || '…');
     else hide('c-dates-wrap');
     $('c-doc').innerHTML = d.contratHtml || '';
+    $('cgv-doc').innerHTML = d.annexesHtml || '';
+    if (!d.echeancier || d.echeancier.length < 2) hide('c-ech-txt');
     $('f-nom').value = d.nomComplet || '';
     document.querySelectorAll('.only-part').forEach(el => el.classList.toggle('hidden', pro));
     document.querySelectorAll('.only-pro').forEach(el => el.classList.toggle('hidden', !pro));
-    if (pro) hide('c-hint-retract');
     hide('loading'); show('contract');
     setupCanvas();
   }
+
+  // ====== CGV (fenêtre) ======
+  const openCgv = e => { e.preventDefault(); e.stopPropagation(); show('cgv-modal'); document.body.classList.add('no-scroll'); $('cgv-doc').scrollTop = 0; };
+  const closeCgv = () => { hide('cgv-modal'); document.body.classList.remove('no-scroll'); };
+  document.querySelectorAll('[data-cgv]').forEach(b => b.addEventListener('click', openCgv));
+  $('cgv-close').addEventListener('click', closeCgv);
+  $('cgv-modal').addEventListener('click', e => { if (e.target.id === 'cgv-modal') closeCgv(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeCgv(); });
 
   // ====== Signature ======
   let canvas, ctx, drawing = false, hasInk = false, last = null;
@@ -270,16 +290,15 @@
     const err = $('f-err'); err.textContent = '';
     const nom = $('f-nom').value.trim(), adr = $('f-adresse').value.trim(), cp = $('f-cpville').value.trim();
     if (!nom || !adr || !cp) { err.textContent = 'Merci de remplir ton nom et ton adresse complète.'; return; }
-    if (!$('f-cgv').checked) { err.textContent = "Merci de cocher la case d'acceptation du contrat et des CGV."; return; }
+    if (!$('f-cgv').checked) { err.textContent = "Merci de cocher la case d'acceptation du contrat."; return; }
     if (pro && !$('f-pro').checked) { err.textContent = "Merci de confirmer l'usage professionnel."; return; }
     if (!pro && !$('f-demarrage').checked) { err.textContent = 'Merci de cocher la case de démarrage immédiat.'; return; }
-    if (!$('f-sante').checked) { err.textContent = 'Merci de cocher la déclaration santé et précautions.'; return; }
     if (!hasInk) { err.textContent = 'Merci de signer dans le cadre.'; return; }
     const btn = $('f-submit'); btn.disabled = true; btn.textContent = 'Signature en cours…';
     const payload = {
       t: token, nomSignataire: nom, adresse: adr, cpVille: cp,
       accepteCGV: true, demarrageImmediat: !pro && $('f-demarrage').checked, usagePro: pro && $('f-pro').checked,
-      sante: true, accordEnregistrement: $('f-enreg').checked, accordDiffusion: $('f-diffusion').checked,
+      accordEnregistrement: $('f-enreg').checked, accordDiffusion: $('f-diffusion').checked,
       signature: signatureData(), ip: ip, navigateur: navigator.userAgent
     };
     fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
