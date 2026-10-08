@@ -40,6 +40,12 @@
   .doc-box h1.annexe{font-size:23px;margin-top:34px;padding-top:22px;border-top:1px solid var(--line)}
   .doc-box h2{font-size:15px;color:var(--accent-dark);margin:20px 0 6px}
   .doc-box h3{font-size:14px;margin:16px 0 4px}
+  .doc-box .ech{border-collapse:collapse;margin:6px 0 12px;font-size:14px}
+  .doc-box .ech td,.doc-box .ech th{border:1px solid var(--line);padding:6px 10px;text-align:left}
+  .sched{list-style:none;margin:6px 0 0;padding:0}
+  .sched li{display:flex;justify-content:space-between;gap:12px;padding:7px 0;border-top:1px dashed var(--line);font-size:15px}
+  .sched li:first-child{border-top:0}
+  .sched b{font-weight:600}
   .doc-box p{margin:0 0 10px}
   .scroll-hint{font-size:13px;color:var(--muted);margin-top:10px;text-align:center}
   label.field{display:block;margin-bottom:14px}
@@ -102,6 +108,8 @@
         <div class="item full"><div class="label">Prestation</div><div class="value" id="c-presta"></div></div>
         <div class="item"><div class="label">Prix total</div><div class="price" id="c-prix"></div></div>
         <div class="item"><div class="label">Paiement</div><div class="value" id="c-modalites"></div></div>
+        <div class="item full"><div class="label">Échéancier</div><ul class="sched" id="c-sched"></ul></div>
+        <div class="item full"><div class="label">Moyens de paiement</div><div class="value" id="c-moyens" style="font-size:15px"></div></div>
         <div class="item full" id="c-dates-wrap"><div class="label">Dates</div><div class="value" id="c-dates"></div></div>
       </div>
     </div>
@@ -119,18 +127,36 @@
       <label class="field"><span>Code postal et ville</span><input type="text" id="f-cpville" autocomplete="postal-code" required></label>
 
       <label class="check"><input type="checkbox" id="f-cgv">
-        <div>J'ai lu et j'accepte le contrat et ses annexes (conditions générales de vente<span class="only-part"> et formulaire de rétractation</span>).</div>
+        <div>J'ai lu et j'accepte le contrat, l'échéancier de paiement et ses annexes (conditions générales de vente<span class="only-part"> et formulaire de rétractation</span>).</div>
       </label>
 
       <label class="check only-part"><input type="checkbox" id="f-demarrage">
-        <div>Je demande que l'accompagnement commence avant la fin du délai de rétractation de 14 jours.
-          <small>Si je me rétracte après le début, je paierai les séances déjà réalisées, au prorata du prix total. Si tu ne coches pas cette case, l'accompagnement commencera après ce délai de 14 jours.</small>
+        <div>Je demande que l'accompagnement commence dès maintenant et je renonce à mon droit de rétractation, dans la mesure permise par la loi.
+          <small>Si je me rétractais dans les 14 jours, je resterais redevable des séances déjà réalisées, au prorata du prix total.</small>
         </div>
       </label>
 
       <label class="check only-pro hidden"><input type="checkbox" id="f-pro">
         <div>Je confirme conclure ce contrat pour les besoins de mon activité professionnelle.
           <small>L'accompagnement est en lien direct avec mon activité. Je ne bénéficie donc pas du droit de rétractation du Code de la consommation.</small>
+        </div>
+      </label>
+
+      <label class="check"><input type="checkbox" id="f-sante">
+        <div>Je déclare être en capacité physique et psychique de participer à l'accompagnement, j'ai pris connaissance de l'article 6 « Santé et précautions », et j'accepte que les informations que je partage, y compris sur ma santé, soient utilisées uniquement pour mon accompagnement.
+          <small>En cas de pathologie ou de fragilité (cardiovasculaire, épilepsie, grossesse, trouble psychique, traitement en cours…), je consulte un professionnel de santé et je m'abstiens des pratiques concernées.</small>
+        </div>
+      </label>
+
+      <div style="margin:22px 0 8px" class="label">Tes choix (facultatifs)</div>
+      <label class="check"><input type="checkbox" id="f-enreg">
+        <div>J'accepte que les séances soient enregistrées, pour notre usage exclusif (toi et moi).
+          <small>Jamais partagées, supprimées au plus tard 12 mois après la fin de l'accompagnement.</small>
+        </div>
+      </label>
+      <label class="check"><input type="checkbox" id="f-diffusion">
+        <div>J'accepte que des extraits de séance ou mon témoignage soient diffusés (réseaux sociaux, site, formations).
+          <small>Je peux retirer mon accord à tout moment par simple e-mail.</small>
         </div>
       </label>
 
@@ -149,19 +175,11 @@
       <div class="badge">✓ Contrat signé</div>
       <h1 class="hello" style="font-size:38px">Merci <span id="d-prenom"></span> !</h1>
       <p class="lead" id="d-text" style="margin-bottom:0">Ton contrat est signé. Tu vas recevoir ta copie PDF par e-mail dans quelques instants.</p>
-    </div>
-    <div class="card" id="pay">
-      <h2>Dernière étape : le paiement</h2>
-      <p id="pay-intro"></p>
-      <a class="btn accent hidden" id="pay-stripe" target="_blank" rel="noopener">Payer par carte</a>
-      <div id="pay-iban-wrap" class="hidden">
-        <p id="pay-iban-intro" style="margin-top:18px"></p>
-        <div class="iban" id="pay-iban"></div>
-      </div>
+      <p class="lead" style="margin:18px auto 0">J'ai hâte de commencer cet accompagnement avec toi ✨</p>
     </div>
   </section>
 
-  <p class="foot">SHIFT IDENTITY – Noémie Conche EI – SIRET 922 193 933 00038</p>
+  <p class="foot">Noémie Conche – Entrepreneur individuel – SIRET 922 193 933 00038</p>
 </main>
 
 <script>
@@ -195,6 +213,14 @@
     $('c-presta').textContent = d.prestation || '';
     $('c-prix').textContent = d.prix || '';
     $('c-modalites').textContent = d.modalites || '';
+    $('c-moyens').textContent = d.moyens || '';
+    const ul = $('c-sched'); ul.innerHTML = '';
+    (d.echeancier || []).forEach((x, k) => {
+      const li = document.createElement('li');
+      const a = document.createElement('span'); a.textContent = (d.echeancier.length > 1 ? (k + 1) + '. ' : '') + x.libelle.charAt(0).toUpperCase() + x.libelle.slice(1);
+      const b = document.createElement('b'); b.textContent = x.montant;
+      li.appendChild(a); li.appendChild(b); ul.appendChild(li);
+    });
     if (d.debut || d.fin) $('c-dates').textContent = 'Du ' + (d.debut || '…') + ' au ' + (d.fin || '…');
     else hide('c-dates-wrap');
     $('c-doc').innerHTML = d.contratHtml || '';
@@ -246,11 +272,14 @@
     if (!nom || !adr || !cp) { err.textContent = 'Merci de remplir ton nom et ton adresse complète.'; return; }
     if (!$('f-cgv').checked) { err.textContent = "Merci de cocher la case d'acceptation du contrat et des CGV."; return; }
     if (pro && !$('f-pro').checked) { err.textContent = "Merci de confirmer l'usage professionnel."; return; }
+    if (!pro && !$('f-demarrage').checked) { err.textContent = 'Merci de cocher la case de démarrage immédiat.'; return; }
+    if (!$('f-sante').checked) { err.textContent = 'Merci de cocher la déclaration santé et précautions.'; return; }
     if (!hasInk) { err.textContent = 'Merci de signer dans le cadre.'; return; }
     const btn = $('f-submit'); btn.disabled = true; btn.textContent = 'Signature en cours…';
     const payload = {
       t: token, nomSignataire: nom, adresse: adr, cpVille: cp,
       accepteCGV: true, demarrageImmediat: !pro && $('f-demarrage').checked, usagePro: pro && $('f-pro').checked,
+      sante: true, accordEnregistrement: $('f-enreg').checked, accordDiffusion: $('f-diffusion').checked,
       signature: signatureData(), ip: ip, navigateur: navigator.userAgent
     };
     fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
@@ -266,29 +295,6 @@
     hide('loading'); hide('error');
     $('d-prenom').textContent = (data && data.prenom) || '';
     if (signeLe && data && data.signe) $('d-text').textContent = 'Ton contrat a été signé le ' + signeLe + '. Ta copie PDF t\'a été envoyée par e-mail.';
-    p = p || {};
-    const montant = prix || (data && data.prix) || '';
-    $('pay-intro').textContent = 'Montant : ' + montant + (p.modalites ? ' — ' + p.modalites : '') + '.';
-    if (p.stripe) { $('pay-stripe').href = p.stripe; show('pay-stripe'); }
-    if (p.iban) {
-      $('pay-iban-intro').textContent = p.stripe ? 'Tu préfères le virement ? Voici mes coordonnées :' : 'Tu peux régler par virement avec ces coordonnées :';
-      const rows = [['Titulaire', p.titulaire], ['IBAN', p.iban], ['BIC', p.bic], ['Référence à indiquer', p.reference]].filter(r => r[1]);
-      const box = $('pay-iban'); box.innerHTML = '';
-      rows.forEach(([k, v]) => {
-        const div = document.createElement('div');
-        const a = document.createElement('span'); a.textContent = k;
-        const b = document.createElement('b'); b.textContent = v;
-        div.appendChild(a); div.appendChild(b);
-        if (k === 'IBAN' && navigator.clipboard) {
-          const c = document.createElement('button'); c.type = 'button'; c.className = 'link-btn copy'; c.textContent = 'Copier';
-          c.onclick = () => navigator.clipboard.writeText(v.replace(/\s/g, '')).then(() => { c.textContent = 'Copié ✓'; });
-          div.appendChild(c);
-        }
-        box.appendChild(div);
-      });
-      show('pay-iban-wrap');
-    }
-    if (!p.stripe && !p.iban) $('pay-intro').textContent += ' Je t\'envoie les informations de paiement très vite.';
     show('done');
   }
 })();
