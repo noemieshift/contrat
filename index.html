@@ -152,18 +152,6 @@
         </div>
       </label>
 
-      <div style="margin:22px 0 8px" class="label">Tes choix (facultatifs)</div>
-      <label class="check"><input type="checkbox" id="f-enreg">
-        <div>J'accepte que les séances soient enregistrées, pour notre usage exclusif (toi et moi).
-          <small>Jamais partagées, supprimées au plus tard 12 mois après la fin de l'accompagnement.</small>
-        </div>
-      </label>
-      <label class="check"><input type="checkbox" id="f-diffusion">
-        <div>J'accepte que des extraits de séance ou mon témoignage soient diffusés (réseaux sociaux, site, formations).
-          <small>Je peux retirer mon accord à tout moment par simple e-mail.</small>
-        </div>
-      </label>
-
       <div style="margin:22px 0 6px" class="label">Ta signature</div>
       <div class="sig-zone"><canvas id="sig"></canvas><div class="sig-ph" id="sig-ph">Signe ici</div></div>
       <div class="sig-actions"><span>Avec ton doigt ou ta souris</span><button type="button" class="link-btn" id="sig-clear">Effacer</button></div>
@@ -298,7 +286,6 @@
     const payload = {
       t: token, nomSignataire: nom, adresse: adr, cpVille: cp,
       accepteCGV: true, demarrageImmediat: !pro && $('f-demarrage').checked, usagePro: pro && $('f-pro').checked,
-      accordEnregistrement: $('f-enreg').checked, accordDiffusion: $('f-diffusion').checked,
       signature: signatureData(), ip: ip, navigateur: navigator.userAgent
     };
     fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
