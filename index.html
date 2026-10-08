@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#F6F1EA">
+<title>Ton contrat – SHIFT IDENTITY</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script>
+  // ====== À MODIFIER : colle ici l'URL de ton script Google (étape 3 du guide) ======
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyGecKf8N1cEkBtS1iJ2CvXGe9JjURCeg-J9hBMqdhMlrDgYEi3q7dYFqHhJiuVMTLLdw/exec';
+</script>
+<style>
+  :root{
+    --bg:#F6F1EA; --card:#FFFDF9; --ink:#1E1B18; --muted:#6E655C; --line:#E7DDD1;
+    --accent:#B5654A; --accent-dark:#934C35; --soft:#F1E6DA; --ok:#3F7A55; --err:#B3261E;
+    --serif:'Cormorant Garamond',Georgia,serif; --sans:'Inter',system-ui,-apple-system,sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 16px 80px}
+  .brand{text-align:center;letter-spacing:.38em;font-size:12px;font-weight:600;color:var(--accent);margin-bottom:28px}
+  .brand span{display:block;width:40px;height:1px;background:var(--accent);margin:12px auto 0;opacity:.6}
+  h1.hello{font-family:var(--serif);font-weight:500;font-size:clamp(34px,7vw,48px);line-height:1.1;text-align:center;margin:0 0 10px}
+  .lead{text-align:center;color:var(--muted);max-width:520px;margin:0 auto 34px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:28px 24px;margin-bottom:22px;box-shadow:0 1px 0 rgba(30,27,24,.03)}
+  .card h2{font-family:var(--serif);font-weight:600;font-size:26px;margin:0 0 16px}
+  .recap{display:grid;grid-template-columns:1fr;gap:14px}
+  .recap .item{border-bottom:1px solid var(--line);padding-bottom:12px}
+  .recap .item:last-child{border-bottom:0;padding-bottom:0}
+  .label{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);font-weight:500}
+  .value{font-size:17px;font-weight:500}
+  .price{font-family:var(--serif);font-size:36px;font-weight:600;color:var(--accent-dark);line-height:1.1}
+  .doc-box{max-height:460px;overflow:auto;border:1px solid var(--line);border-radius:12px;padding:22px 20px;background:#FFFEFC;font-size:14.5px;line-height:1.65}
+  .doc-box .doc-marque{letter-spacing:.3em;font-size:11px;color:var(--accent);font-weight:600;margin:0}
+  .doc-box h1{font-family:var(--serif);font-weight:500;font-size:28px;margin:4px 0 14px}
+  .doc-box h1.annexe{font-size:23px;margin-top:34px;padding-top:22px;border-top:1px solid var(--line)}
+  .doc-box h2{font-size:15px;color:var(--accent-dark);margin:20px 0 6px}
+  .doc-box h3{font-size:14px;margin:16px 0 4px}
+  .doc-box p{margin:0 0 10px}
+  .scroll-hint{font-size:13px;color:var(--muted);margin-top:10px;text-align:center}
+  label.field{display:block;margin-bottom:14px}
+  label.field span{display:block;font-size:13px;font-weight:500;margin-bottom:6px}
+  input[type=text]{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+  input[type=text]:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:transparent}
+  .check{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;background:#fff;cursor:pointer}
+  .check input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:0 0 auto}
+  .check small{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+  .sig-zone{border:1.5px dashed #CDBDAD;border-radius:12px;background:#fff;position:relative;touch-action:none}
+  canvas{display:block;width:100%;height:190px;border-radius:12px;cursor:crosshair}
+  .sig-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#B9AA9A;font-family:var(--serif);font-size:22px;pointer-events:none}
+  .sig-actions{display:flex;justify-content:space-between;align-items:center;margin-top:8px;font-size:13px;color:var(--muted)}
+  .link-btn{background:none;border:0;color:var(--accent-dark);font:inherit;font-size:13px;cursor:pointer;text-decoration:underline;padding:4px}
+  .btn{display:block;width:100%;padding:17px 20px;border:0;border-radius:999px;background:var(--ink);color:#fff;font:inherit;font-weight:600;font-size:16px;cursor:pointer;text-align:center;text-decoration:none;transition:background .2s}
+  .btn:hover{background:#3A332D}
+  .btn.accent{background:var(--accent)}
+  .btn.accent:hover{background:var(--accent-dark)}
+  .btn[disabled]{opacity:.55;cursor:wait}
+  .err{color:var(--err);font-size:14px;margin:10px 0 0;min-height:1em}
+  .center{text-align:center}
+  .badge{display:inline-flex;align-items:center;gap:8px;background:#E6F0E9;color:var(--ok);border-radius:999px;padding:6px 14px;font-size:13px;font-weight:600;margin-bottom:14px}
+  .iban{background:var(--soft);border-radius:12px;padding:16px;font-size:15px}
+  .iban div{display:flex;justify-content:space-between;gap:12px;padding:6px 0;border-bottom:1px solid rgba(0,0,0,.06);flex-wrap:wrap}
+  .iban div:last-child{border-bottom:0}
+  .iban b{font-weight:600;word-break:break-all}
+  .copy{font-size:12px}
+  .loader{display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--muted);padding:60px 0}
+  .dot{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .foot{text-align:center;font-size:12px;color:var(--muted);margin-top:34px}
+  .hidden{display:none!important}
+  @media (min-width:640px){
+    .wrap{padding:60px 24px 90px}
+    .card{padding:34px 36px}
+    .recap{grid-template-columns:1fr 1fr}
+    .recap .item.full{grid-column:1/-1}
+  }
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="brand">SHIFT IDENTITY<span></span></div>
+
+  <section id="loading" class="loader"><div class="dot"></div>Chargement de ton contrat…</section>
+
+  <section id="error" class="card center hidden">
+    <h2>Oups</h2>
+    <p id="error-msg"></p>
+    <p class="scroll-hint">Si le problème continue, écris-moi directement.</p>
+  </section>
+
+  <section id="contract" class="hidden">
+    <h1 class="hello">Bienvenue <span id="c-prenom"></span></h1>
+    <p class="lead">Voici le récapitulatif de ton accompagnement. Lis le contrat, coche les cases et signe : ça prend 2 minutes.</p>
+
+    <div class="card">
+      <h2>Ton accompagnement</h2>
+      <div class="recap">
+        <div class="item full"><div class="label">Prestation</div><div class="value" id="c-presta"></div></div>
+        <div class="item"><div class="label">Prix total</div><div class="price" id="c-prix"></div></div>
+        <div class="item"><div class="label">Paiement</div><div class="value" id="c-modalites"></div></div>
+        <div class="item full" id="c-dates-wrap"><div class="label">Dates</div><div class="value" id="c-dates"></div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Ton contrat</h2>
+      <div class="doc-box" id="c-doc"></div>
+      <p class="scroll-hint">Fais défiler pour lire le contrat, les conditions générales de vente<span id="c-hint-retract"> et le formulaire de rétractation</span>.</p>
+    </div>
+
+    <form id="sign-form" class="card" novalidate>
+      <h2>Validation et signature</h2>
+      <label class="field"><span>Nom et prénom</span><input type="text" id="f-nom" autocomplete="name" required></label>
+      <label class="field"><span>Adresse postale (pour ta facture)</span><input type="text" id="f-adresse" autocomplete="street-address" required></label>
+      <label class="field"><span>Code postal et ville</span><input type="text" id="f-cpville" autocomplete="postal-code" required></label>
+
+      <label class="check"><input type="checkbox" id="f-cgv">
+        <div>J'ai lu et j'accepte le contrat et ses annexes (conditions générales de vente<span class="only-part"> et formulaire de rétractation</span>).</div>
+      </label>
+
+      <label class="check only-part"><input type="checkbox" id="f-demarrage">
+        <div>Je demande que l'accompagnement commence avant la fin du délai de rétractation de 14 jours.
+          <small>Si je me rétracte après le début, je paierai les séances déjà réalisées, au prorata du prix total. Si tu ne coches pas cette case, l'accompagnement commencera après ce délai de 14 jours.</small>
+        </div>
+      </label>
+
+      <label class="check only-pro hidden"><input type="checkbox" id="f-pro">
+        <div>Je confirme conclure ce contrat pour les besoins de mon activité professionnelle.
+          <small>L'accompagnement est en lien direct avec mon activité. Je ne bénéficie donc pas du droit de rétractation du Code de la consommation.</small>
+        </div>
+      </label>
+
+      <div style="margin:22px 0 6px" class="label">Ta signature</div>
+      <div class="sig-zone"><canvas id="sig"></canvas><div class="sig-ph" id="sig-ph">Signe ici</div></div>
+      <div class="sig-actions"><span>Avec ton doigt ou ta souris</span><button type="button" class="link-btn" id="sig-clear">Effacer</button></div>
+
+      <p class="err" id="f-err"></p>
+      <button type="submit" class="btn" id="f-submit" style="margin-top:14px">Signer le contrat</button>
+      <p class="scroll-hint">En signant, ta signature, la date, l'heure et ton adresse IP sont enregistrées comme preuve, et tu reçois une copie PDF par e-mail.</p>
+    </form>
+  </section>
+
+  <section id="done" class="hidden">
+    <div class="card center">
+      <div class="badge">✓ Contrat signé</div>
+      <h1 class="hello" style="font-size:38px">Merci <span id="d-prenom"></span> !</h1>
+      <p class="lead" id="d-text" style="margin-bottom:0">Ton contrat est signé. Tu vas recevoir ta copie PDF par e-mail dans quelques instants.</p>
+    </div>
+    <div class="card" id="pay">
+      <h2>Dernière étape : le paiement</h2>
+      <p id="pay-intro"></p>
+      <a class="btn accent hidden" id="pay-stripe" target="_blank" rel="noopener">Payer par carte</a>
+      <div id="pay-iban-wrap" class="hidden">
+        <p id="pay-iban-intro" style="margin-top:18px"></p>
+        <div class="iban" id="pay-iban"></div>
+      </div>
+    </div>
+  </section>
+
+  <p class="foot">SHIFT IDENTITY – Noémie Conche EI – SIRET 922 193 933 00038</p>
+</main>
+
+<script>
+(function(){
+  const $ = id => document.getElementById(id);
+  const show = id => $(id).classList.remove('hidden');
+  const hide = id => $(id).classList.add('hidden');
+  const token = new URLSearchParams(location.search).get('t') || '';
+  let data = null, ip = 'non disponible';
+
+  function fail(msg){ hide('loading'); hide('contract'); $('error-msg').textContent = msg; show('error'); }
+
+  if (!SCRIPT_URL || SCRIPT_URL.indexOf('script.google.com') === -1) { fail("La page n'est pas encore reliée au script Google."); return; }
+  if (!token) { fail("Ce lien est incomplet. Utilise le lien exact qui t'a été envoyé."); return; }
+
+  fetch('https://api.ipify.org?format=json').then(r => r.json()).then(j => { if (j && j.ip) ip = j.ip; }).catch(() => {});
+
+  fetch(SCRIPT_URL + '?t=' + encodeURIComponent(token))
+    .then(r => r.json())
+    .then(d => {
+      if (!d.ok) return fail(d.erreur || 'Contrat introuvable.');
+      data = d;
+      if (d.signe) return showDone(d.paiement, d.prix, d.signeLe);
+      render(d);
+    })
+    .catch(() => fail('Impossible de charger ton contrat. Vérifie ta connexion et recharge la page.'));
+
+  function render(d){
+    const pro = d.type === 'Professionnel';
+    $('c-prenom').textContent = d.prenom || '';
+    $('c-presta').textContent = d.prestation || '';
+    $('c-prix').textContent = d.prix || '';
+    $('c-modalites').textContent = d.modalites || '';
+    if (d.debut || d.fin) $('c-dates').textContent = 'Du ' + (d.debut || '…') + ' au ' + (d.fin || '…');
+    else hide('c-dates-wrap');
+    $('c-doc').innerHTML = d.contratHtml || '';
+    $('f-nom').value = d.nomComplet || '';
+    document.querySelectorAll('.only-part').forEach(el => el.classList.toggle('hidden', pro));
+    document.querySelectorAll('.only-pro').forEach(el => el.classList.toggle('hidden', !pro));
+    if (pro) hide('c-hint-retract');
+    hide('loading'); show('contract');
+    setupCanvas();
+  }
+
+  // ====== Signature ======
+  let canvas, ctx, drawing = false, hasInk = false, last = null;
+  function setupCanvas(){
+    canvas = $('sig'); ctx = canvas.getContext('2d');
+    const resize = () => {
+      const ratio = Math.max(window.devicePixelRatio || 1, 1);
+      const rect = canvas.getBoundingClientRect();
+      const keep = hasInk ? canvas.toDataURL() : null;
+      canvas.width = rect.width * ratio; canvas.height = rect.height * ratio;
+      ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+      ctx.lineWidth = 2.2; ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.strokeStyle = '#1E1B18';
+      if (keep) { const img = new Image(); img.onload = () => ctx.drawImage(img, 0, 0, rect.width, rect.height); img.src = keep; }
+    };
+    resize(); window.addEventListener('resize', resize);
+    const pos = e => { const r = canvas.getBoundingClientRect(); return { x: e.clientX - r.left, y: e.clientY - r.top }; };
+    canvas.addEventListener('pointerdown', e => { drawing = true; last = pos(e); canvas.setPointerCapture(e.pointerId); hide('sig-ph'); ctx.beginPath(); ctx.arc(last.x, last.y, 1, 0, Math.PI * 2); ctx.fill(); hasInk = true; });
+    canvas.addEventListener('pointermove', e => { if (!drawing) return; const p = pos(e); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p; hasInk = true; });
+    const stop = () => { drawing = false; };
+    canvas.addEventListener('pointerup', stop); canvas.addEventListener('pointercancel', stop); canvas.addEventListener('pointerleave', stop);
+    $('sig-clear').addEventListener('click', () => { ctx.clearRect(0, 0, canvas.width, canvas.height); hasInk = false; show('sig-ph'); });
+  }
+
+  function signatureData(){
+    // Export sur fond blanc pour un rendu propre dans le PDF
+    const out = document.createElement('canvas');
+    const w = 600, h = Math.round(600 * canvas.height / canvas.width);
+    out.width = w; out.height = h;
+    const o = out.getContext('2d'); o.fillStyle = '#fff'; o.fillRect(0, 0, w, h); o.drawImage(canvas, 0, 0, w, h);
+    return out.toDataURL('image/png');
+  }
+
+  // ====== Envoi ======
+  $('sign-form').addEventListener('submit', e => {
+    e.preventDefault();
+    const pro = data && data.type === 'Professionnel';
+    const err = $('f-err'); err.textContent = '';
+    const nom = $('f-nom').value.trim(), adr = $('f-adresse').value.trim(), cp = $('f-cpville').value.trim();
+    if (!nom || !adr || !cp) { err.textContent = 'Merci de remplir ton nom et ton adresse complète.'; return; }
+    if (!$('f-cgv').checked) { err.textContent = "Merci de cocher la case d'acceptation du contrat et des CGV."; return; }
+    if (pro && !$('f-pro').checked) { err.textContent = "Merci de confirmer l'usage professionnel."; return; }
+    if (!hasInk) { err.textContent = 'Merci de signer dans le cadre.'; return; }
+    const btn = $('f-submit'); btn.disabled = true; btn.textContent = 'Signature en cours…';
+    const payload = {
+      t: token, nomSignataire: nom, adresse: adr, cpVille: cp,
+      accepteCGV: true, demarrageImmediat: !pro && $('f-demarrage').checked, usagePro: pro && $('f-pro').checked,
+      signature: signatureData(), ip: ip, navigateur: navigator.userAgent
+    };
+    fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
+      .then(r => r.json())
+      .then(d => {
+        if (!d.ok) { err.textContent = d.erreur || 'La signature a échoué.'; btn.disabled = false; btn.textContent = 'Signer le contrat'; return; }
+        hide('contract'); showDone(d.paiement, d.prix, d.signeLe); window.scrollTo({ top: 0, behavior: 'smooth' });
+      })
+      .catch(() => { err.textContent = 'Problème de connexion. Réessaie dans un instant.'; btn.disabled = false; btn.textContent = 'Signer le contrat'; });
+  });
+
+  function showDone(p, prix, signeLe){
+    hide('loading'); hide('error');
+    $('d-prenom').textContent = (data && data.prenom) || '';
+    if (signeLe && data && data.signe) $('d-text').textContent = 'Ton contrat a été signé le ' + signeLe + '. Ta copie PDF t\'a été envoyée par e-mail.';
+    p = p || {};
+    const montant = prix || (data && data.prix) || '';
+    $('pay-intro').textContent = 'Montant : ' + montant + (p.modalites ? ' — ' + p.modalites : '') + '.';
+    if (p.stripe) { $('pay-stripe').href = p.stripe; show('pay-stripe'); }
+    if (p.iban) {
+      $('pay-iban-intro').textContent = p.stripe ? 'Tu préfères le virement ? Voici mes coordonnées :' : 'Tu peux régler par virement avec ces coordonnées :';
+      const rows = [['Titulaire', p.titulaire], ['IBAN', p.iban], ['BIC', p.bic], ['Référence à indiquer', p.reference]].filter(r => r[1]);
+      const box = $('pay-iban'); box.innerHTML = '';
+      rows.forEach(([k, v]) => {
+        const div = document.createElement('div');
+        const a = document.createElement('span'); a.textContent = k;
+        const b = document.createElement('b'); b.textContent = v;
+        div.appendChild(a); div.appendChild(b);
+        if (k === 'IBAN' && navigator.clipboard) {
+          const c = document.createElement('button'); c.type = 'button'; c.className = 'link-btn copy'; c.textContent = 'Copier';
+          c.onclick = () => navigator.clipboard.writeText(v.replace(/\s/g, '')).then(() => { c.textContent = 'Copié ✓'; });
+          div.appendChild(c);
+        }
+        box.appendChild(div);
+      });
+      show('pay-iban-wrap');
+    }
+    if (!p.stripe && !p.iban) $('pay-intro').textContent += ' Je t\'envoie les informations de paiement très vite.';
+    show('done');
+  }
+})();
+</script>
+</body>
+</html>
