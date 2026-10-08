@@ -127,7 +127,7 @@
     <div class="card">
       <h2>Ton contrat</h2>
       <div class="doc-box" id="c-doc"></div>
-      <p class="cgv-links"><button type="button" class="inline-link" data-cgv>Conditions générales de vente<span class="only-part"> et formulaire de rétractation</span></button></p>
+      <p class="cgv-links"><button type="button" class="inline-link" data-cgv>Conditions générales de vente et formulaire de rétractation</button></p>
     </div>
 
     <form id="sign-form" class="card" novalidate>
@@ -140,17 +140,18 @@
         <div>J'ai lu et j'accepte le contrat<span id="c-ech-txt">, l'échéancier de paiement</span> et les <button type="button" class="inline-link" data-cgv>conditions générales de vente</button>.</div>
       </label>
 
-      <label class="check only-part"><input type="checkbox" id="f-demarrage">
-        <div>Je demande que l'accompagnement commence dès maintenant et je renonce à mon droit de rétractation, dans la mesure permise par la loi.
-          <small>Si je me rétractais dans les 14 jours, je resterais redevable des séances déjà réalisées, au prorata du prix total.</small>
-        </div>
-      </label>
-
       <label class="check only-pro hidden"><input type="checkbox" id="f-pro">
         <div>Je confirme conclure ce contrat pour les besoins de mon activité professionnelle.
           <small>L'accompagnement est en lien direct avec mon activité. Je ne bénéficie donc pas du droit de rétractation du Code de la consommation.</small>
         </div>
       </label>
+
+      <label class="check"><input type="checkbox" id="f-demarrage">
+        <div><span class="only-pro hidden">Si je devais être considéré comme consommateur, je</span><span class="only-part">Je</span> demande que l'accompagnement commence dès maintenant et je renonce à mon droit de rétractation, dans la mesure permise par la loi.
+          <small>Si je me rétractais dans les 14 jours, je resterais redevable des séances déjà réalisées, au prorata du prix total.</small>
+        </div>
+      </label>
+
 
       <div style="margin:22px 0 6px" class="label">Ta signature</div>
       <div class="sig-zone"><canvas id="sig"></canvas><div class="sig-ph" id="sig-ph">Signe ici</div></div>
@@ -280,12 +281,12 @@
     if (!nom || !adr || !cp) { err.textContent = 'Merci de remplir ton nom et ton adresse complète.'; return; }
     if (!$('f-cgv').checked) { err.textContent = "Merci de cocher la case d'acceptation du contrat."; return; }
     if (pro && !$('f-pro').checked) { err.textContent = "Merci de confirmer l'usage professionnel."; return; }
-    if (!pro && !$('f-demarrage').checked) { err.textContent = 'Merci de cocher la case de démarrage immédiat.'; return; }
+    if (!$('f-demarrage').checked) { err.textContent = 'Merci de cocher la case de démarrage immédiat.'; return; }
     if (!hasInk) { err.textContent = 'Merci de signer dans le cadre.'; return; }
     const btn = $('f-submit'); btn.disabled = true; btn.textContent = 'Signature en cours…';
     const payload = {
       t: token, nomSignataire: nom, adresse: adr, cpVille: cp,
-      accepteCGV: true, demarrageImmediat: !pro && $('f-demarrage').checked, usagePro: pro && $('f-pro').checked,
+      accepteCGV: true, demarrageImmediat: $('f-demarrage').checked, usagePro: pro && $('f-pro').checked,
       signature: signatureData(), ip: ip, navigateur: navigator.userAgent
     };
     fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
