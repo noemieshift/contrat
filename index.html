@@ -76,6 +76,14 @@
   .loader{display:flex;flex-direction:column;align-items:center;gap:14px;color:var(--muted);padding:60px 0}
   .dot{width:38px;height:38px;border-radius:50%;border:2px solid var(--line);border-top-color:var(--accent);animation:spin 1s linear infinite}
   @keyframes spin{to{transform:rotate(360deg)}}
+  .choice{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:6px}
+  .choice label{display:flex;flex-direction:column;gap:2px;padding:14px;border:1.5px solid var(--line);border-radius:12px;background:#fff;cursor:pointer;font-weight:500}
+  .choice label small{font-weight:400;color:var(--muted);font-size:13px}
+  .choice input{position:absolute;opacity:0;pointer-events:none}
+  .choice label.on{border-color:var(--accent);background:var(--soft)}
+  select{width:100%;padding:13px 14px;border:1px solid var(--line);border-radius:10px;font:inherit;background:#fff;color:var(--ink)}
+  .pro-fields{margin-top:16px}
+  .doc-wait{color:var(--muted);text-align:center;padding:30px 10px}
   .cgv-links{text-align:center;margin-top:14px;font-size:14px;color:var(--muted)}
   .inline-link{background:none;border:0;padding:0;font:inherit;color:var(--accent-dark);text-decoration:underline;cursor:pointer}
   .modal{position:fixed;inset:0;background:rgba(30,27,24,.45);display:flex;align-items:center;justify-content:center;padding:16px;z-index:50}
@@ -124,9 +132,25 @@
       </div>
     </div>
 
+    <div class="card" id="qualite-card">
+      <h2>Tu signes en tant que…</h2>
+      <div class="choice">
+        <label id="q-part-l"><input type="radio" name="qualite" value="Particulier">Particulier<small>À titre personnel</small></label>
+        <label id="q-pro-l"><input type="radio" name="qualite" value="Professionnel">Professionnel<small>Entreprise, indépendant, freelance</small></label>
+      </div>
+      <div class="pro-fields only-pro hidden">
+        <label class="field"><span>Nom de ton entreprise</span><input type="text" id="f-societe" autocomplete="organization"></label>
+        <label class="field"><span>N° d'immatriculation (SIRET, ou équivalent si tu es à l'étranger)</span><input type="text" id="f-ident"></label>
+        <label class="field"><span>Pays de ton entreprise</span>
+          <select id="f-zone"><option value="FR">France</option><option value="UE">Autre pays de l'Union européenne</option><option value="HORS_UE">Hors Union européenne</option></select></label>
+        <label class="field only-ue hidden"><span>N° de TVA intracommunautaire</span><input type="text" id="f-tva"></label>
+        <p class="scroll-hint" style="text-align:left;margin-top:0">En renseignant ton entreprise, tu confirmes conclure ce contrat pour les besoins de ton activité professionnelle.</p>
+      </div>
+    </div>
+
     <div class="card">
       <h2>Ton contrat</h2>
-      <div class="doc-box" id="c-doc"></div>
+      <div class="doc-box" id="c-doc"><p class="doc-wait">Choisis ci-dessus si tu signes en tant que particulier ou professionnel pour afficher ton contrat.</p></div>
       <p class="cgv-links"><button type="button" class="inline-link" data-cgv>Conditions générales de vente et formulaire de rétractation</button></p>
     </div>
 
@@ -140,11 +164,6 @@
         <div>J'ai lu et j'accepte le contrat<span id="c-ech-txt">, l'échéancier de paiement</span> et les <button type="button" class="inline-link" data-cgv>conditions générales de vente</button>.</div>
       </label>
 
-      <label class="check only-pro hidden"><input type="checkbox" id="f-pro">
-        <div>Je confirme conclure ce contrat pour les besoins de mon activité professionnelle.
-          <small>L'accompagnement est en lien direct avec mon activité. Je ne bénéficie donc pas du droit de rétractation du Code de la consommation.</small>
-        </div>
-      </label>
 
       <label class="check"><input type="checkbox" id="f-demarrage">
         <div><span class="only-pro hidden">Si je devais être considéré comme consommateur, je</span><span class="only-part">Je</span> demande que l'accompagnement commence dès maintenant et je renonce à mon droit de rétractation, dans la mesure permise par la loi.
@@ -208,7 +227,6 @@
     .catch(() => fail('Impossible de charger ton contrat. Vérifie ta connexion et recharge la page.'));
 
   function render(d){
-    const pro = d.type === 'Professionnel';
     $('c-prenom').textContent = d.prenom || '';
     $('c-presta').textContent = d.prestation || '';
     $('c-prix').textContent = d.prix || '';
@@ -223,14 +241,35 @@
     });
     if (d.debut || d.fin) $('c-dates').textContent = 'Du ' + (d.debut || '…') + ' au ' + (d.fin || '…');
     else hide('c-dates-wrap');
-    $('c-doc').innerHTML = d.contratHtml || '';
-    $('cgv-doc').innerHTML = d.annexesHtml || '';
     if (!d.echeancier || d.echeancier.length < 2) hide('c-ech-txt');
     $('f-nom').value = d.nomComplet || '';
-    document.querySelectorAll('.only-part').forEach(el => el.classList.toggle('hidden', pro));
-    document.querySelectorAll('.only-pro').forEach(el => el.classList.toggle('hidden', !pro));
+    $('f-zone').value = d.zoneSuggeree || 'FR';
+    document.querySelectorAll('input[name=qualite]').forEach(i => i.addEventListener('change', () => setQualite(i.value)));
+    ['f-societe', 'f-ident', 'f-tva'].forEach(id => $(id).addEventListener('input', majChamps));
+    $('f-zone').addEventListener('change', majChamps);
+    if (d.typeSuggere) { document.querySelector('input[name=qualite][value="' + d.typeSuggere + '"]').checked = true; setQualite(d.typeSuggere); }
+    else document.querySelectorAll('.only-part, .only-pro').forEach(el => el.classList.add('hidden'));
     hide('loading'); show('contract');
     setupCanvas();
+  }
+
+  // ====== Qualité (particulier / pro) ======
+  let qualite = '';
+  function setQualite(v){
+    qualite = v;
+    const pro = v === 'Professionnel';
+    $('q-part-l').classList.toggle('on', !pro); $('q-pro-l').classList.toggle('on', pro);
+    $('c-doc').innerHTML = (pro ? data.contratPro : data.contratPart) || '';
+    $('cgv-doc').innerHTML = (pro ? data.annexesPro : data.annexesPart) || '';
+    document.querySelectorAll('.only-part').forEach(el => el.classList.toggle('hidden', pro));
+    document.querySelectorAll('.only-pro').forEach(el => el.classList.toggle('hidden', !pro));
+    majChamps();
+  }
+  function majChamps(){
+    const z = $('f-zone').value;
+    document.querySelectorAll('.only-ue').forEach(el => el.classList.toggle('hidden', !(qualite === 'Professionnel' && z === 'UE')));
+    const val = { societe: $('f-societe').value.trim() || '[ton entreprise]', ident: $('f-ident').value.trim() || '[numéro]', tva: (data.mentionsTVA || {})[z] || '' };
+    document.querySelectorAll('#c-doc [data-f]').forEach(el => { el.textContent = val[el.dataset.f]; });
   }
 
   // ====== CGV (fenêtre) ======
@@ -275,18 +314,20 @@
   // ====== Envoi ======
   $('sign-form').addEventListener('submit', e => {
     e.preventDefault();
-    const pro = data && data.type === 'Professionnel';
+    const pro = qualite === 'Professionnel';
     const err = $('f-err'); err.textContent = '';
+    if (!qualite) { err.textContent = 'Merci d\'indiquer si tu signes en tant que particulier ou professionnel (en haut de la page).'; return; }
+    if (pro && (!$('f-societe').value.trim() || !$('f-ident').value.trim())) { err.textContent = 'Merci d\'indiquer le nom et le numéro d\'immatriculation de ton entreprise.'; return; }
+    if (pro && $('f-zone').value === 'UE' && !$('f-tva').value.trim()) { err.textContent = 'Merci d\'indiquer ton numéro de TVA intracommunautaire.'; return; }
     const nom = $('f-nom').value.trim(), adr = $('f-adresse').value.trim(), cp = $('f-cpville').value.trim();
     if (!nom || !adr || !cp) { err.textContent = 'Merci de remplir ton nom et ton adresse complète.'; return; }
     if (!$('f-cgv').checked) { err.textContent = "Merci de cocher la case d'acceptation du contrat."; return; }
-    if (pro && !$('f-pro').checked) { err.textContent = "Merci de confirmer l'usage professionnel."; return; }
     if (!$('f-demarrage').checked) { err.textContent = 'Merci de cocher la case de démarrage immédiat.'; return; }
     if (!hasInk) { err.textContent = 'Merci de signer dans le cadre.'; return; }
     const btn = $('f-submit'); btn.disabled = true; btn.textContent = 'Signature en cours…';
     const payload = {
       t: token, nomSignataire: nom, adresse: adr, cpVille: cp,
-      accepteCGV: true, demarrageImmediat: $('f-demarrage').checked, usagePro: pro && $('f-pro').checked,
+      accepteCGV: true, demarrageImmediat: $('f-demarrage').checked, qualite: qualite, societe: $('f-societe').value.trim(), ident: $('f-ident').value.trim(), zone: $('f-zone').value, tvaClient: $('f-tva').value.trim(),
       signature: signatureData(), ip: ip, navigateur: navigator.userAgent
     };
     fetch(SCRIPT_URL, { method: 'POST', body: JSON.stringify(payload) })
