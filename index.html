@@ -40,6 +40,12 @@
   .doc-box h1.annexe{font-size:23px;margin-top:34px;padding-top:22px;border-top:1px solid var(--line)}
   .doc-box h2{font-size:15px;color:var(--accent-dark);margin:20px 0 6px}
   .doc-box h3{font-size:14px;margin:16px 0 4px}
+  .doc-box .doc-sous{color:var(--muted);font-size:13px;margin:-8px 0 14px}
+  .doc-box .parties{width:100%;border-collapse:separate;border-spacing:0 8px;margin:0 0 6px}
+  .doc-box .parties td{vertical-align:top;background:var(--soft);border-radius:10px;padding:10px 14px;font-size:14px;line-height:1.55}
+  .doc-box .lbl{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  @media (min-width:640px){.doc-box .parties{border-spacing:10px 0;margin:0 -10px 6px;width:calc(100% + 20px)}.doc-box .parties td{width:50%}}
+  @media (max-width:639px){.doc-box .parties td{display:block;margin-bottom:8px}}
   .doc-box .ech{border-collapse:collapse;margin:6px 0 12px;font-size:14px}
   .doc-box .ech td,.doc-box .ech th{border:1px solid var(--line);padding:6px 10px;text-align:left}
   .sched{list-style:none;margin:6px 0 0;padding:0}
@@ -127,7 +133,7 @@
         <div class="item full"><div class="label">Prestation</div><div class="value" id="c-presta"></div></div>
         <div class="item"><div class="label">Prix total</div><div class="price" id="c-prix"></div></div>
         <div class="item"><div class="label">Paiement</div><div class="value" id="c-modalites"></div></div>
-        <div class="item full"><div class="label">Échéancier</div><ul class="sched" id="c-sched"></ul></div>
+        <div class="item full" id="c-sched-wrap"><div class="label">Échéancier</div><ul class="sched" id="c-sched"></ul></div>
         <div class="item full"><div class="label">Moyens de paiement</div><div class="value" id="c-moyens" style="font-size:15px"></div></div>
         <div class="item full" id="c-dates-wrap"><div class="label">Dates</div><div class="value" id="c-dates"></div></div>
       </div>
@@ -242,7 +248,7 @@
     });
     if (d.debut || d.fin) $('c-dates').textContent = 'Du ' + (d.debut || '…') + ' au ' + (d.fin || '…');
     else hide('c-dates-wrap');
-    if (!d.echeancier || d.echeancier.length < 2) hide('c-ech-txt');
+    if (!d.echeancier || d.echeancier.length < 2) { hide('c-ech-txt'); hide('c-sched-wrap'); }
     $('f-nom').value = d.nomComplet || '';
     $('f-zone').value = d.zoneSuggeree || 'FR';
     document.querySelectorAll('input[name=qualite]').forEach(i => i.addEventListener('change', () => setQualite(i.value)));
