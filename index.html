@@ -55,6 +55,7 @@
   .check{display:flex;gap:12px;align-items:flex-start;padding:14px;border:1px solid var(--line);border-radius:12px;margin-bottom:12px;background:#fff;cursor:pointer}
   .check input{width:20px;height:20px;margin-top:2px;accent-color:var(--accent);flex:0 0 auto}
   .check small{display:block;color:var(--muted);font-size:13px;margin-top:4px}
+  .check small.fine{font-size:11.5px;opacity:.75;margin-top:6px}
   .sig-zone{border:1.5px dashed #CDBDAD;border-radius:12px;background:#fff;position:relative;touch-action:none}
   canvas{display:block;width:100%;height:190px;border-radius:12px;cursor:crosshair}
   .sig-ph{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#B9AA9A;font-family:var(--serif);font-size:22px;pointer-events:none}
@@ -166,8 +167,8 @@
 
 
       <label class="check"><input type="checkbox" id="f-demarrage">
-        <div>Je veux commencer l'accompagnement tout de suite et je renonce à mon délai de rétractation.
-          <small>Dans la mesure permise par la loi : si je me rétractais dans les 14 jours, je paierais les séances déjà réalisées.</small>
+        <div>Je veux commencer l'accompagnement tout de suite et je renonce à mon délai de rétractation, dans la mesure permise par la loi (article 4 du contrat).
+          <small class="fine">Si je me rétractais dans les 14 jours, je resterais redevable des séances déjà réalisées, au prorata du prix total.</small>
         </div>
       </label>
 
